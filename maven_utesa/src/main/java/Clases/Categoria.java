@@ -37,6 +37,7 @@ public class Categoria {
     
     public String insertar_categoria(){
         Db dbase = Util.getConection();
+        Respuesta r = new Respuesta();
         String sql="INSERT INTO \"Categoria\"(id, descripcion)\n" +
         "    VALUES (?, ?);";
         try {
@@ -45,10 +46,16 @@ public class Categoria {
             p.setString(2, descripcion);
             p.execute();
             dbase.CerrarConexion();
-            return "1";
+            r.setId(1);
+            r.setMensaje("Se inserto correctamente");
+            return Respuesta.ToJson(r);
         } catch (SQLException ex) {
             Logger.getLogger(Categoria.class.getName()).log(Level.SEVERE, null, ex);
-            return "-1"+" "+ex.getMessage();
+            System.out.println(ex.getMessage());
+            r.setId(-1);
+            r.setMensaje("Error en la base de datos");
+            return Respuesta.ToJson(r);
+            
         }
     }
 }
