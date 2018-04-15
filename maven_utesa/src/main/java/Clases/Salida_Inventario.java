@@ -63,8 +63,15 @@ public class Salida_Inventario {
     
     public void salida_inventario(String js_entrada_inv,String js_detalle_ent){
         Gson json = new Gson();
+        Respuesta r = new Respuesta();
         Salida_Inventario e = json.fromJson(js_entrada_inv, Salida_Inventario.class);
-        e.setId_salida(insert_salida_inventario(e));
+        try {
+            e.setId_salida(insert_salida_inventario(e));
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            r.setId(-1);
+            r.setMensaje("Error de la base de datos");
+        }
         
         
         
@@ -87,33 +94,31 @@ public class Salida_Inventario {
             try {
                 de.insert(de);
             } catch (SQLException ex) {
-                Logger.getLogger(Salida_Inventario.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(ex.getMessage());
+                r.setId(-1);
+                r.setMensaje("Error de la base de datos");
             }
         }
         
     }
     
-    public int insert_salida_inventario(Salida_Inventario info){
+    public int insert_salida_inventario(Salida_Inventario info) throws SQLException{
         Db dbase = Util.getConection();
         Respuesta r = new Respuesta();
         String sql = "INSERT INTO \"Salida_Inventario\"(\n" +
         "            id_concepto, fecha, id_usuario)\n" +
         "    VALUES (?, ?, ?);";
-        try{
-            PreparedStatement p = Db.conexion.prepareStatement(sql);
-            p.setInt(1,info.getId_concepto());
-            p.setTimestamp(2, info.getFecha());
-            p.setString(3, info.getId_usuario());
-            p.execute();
-            dbase.CerrarConexion();
-            
-            return getLastId();
-        }
-        catch(SQLException e){
-            
-            System.err.println(e.getMessage());
-            return -1;
-        }
+        
+        PreparedStatement p = Db.conexion.prepareStatement(sql);
+        p.setInt(1,info.getId_concepto());
+        p.setTimestamp(2, info.getFecha());
+        p.setString(3, info.getId_usuario());
+        p.execute();
+        dbase.CerrarConexion();
+
+        return getLastId();
+       
+        
     }
     
     public int getLastId() {
