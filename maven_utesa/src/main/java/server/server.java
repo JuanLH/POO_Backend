@@ -10,6 +10,8 @@ package server;
  * @author Michael Jared Diaz
  */
 
+import Clases.Categoria;
+import Clases.Concepto;
 import Clases.Producto;
 import Clases.Respuesta;
 import Clases.Token;
@@ -22,47 +24,6 @@ public class server {
     public static void main(String a []){
         
         port(5555);
-        /*
-        get("/hello", (req, res) -> "<h3> GET </h3> Hello World <br> Hello <b>UTESA</b>");
-        
-        post("/hello", (req, res) -> "<h3> POST </h3> Hello World <br> Hello <b>UTESA</b>");
-        
-        //-------------------------------
-        
-        // (GET) RECIBIENDO LOS PARAMETRO DIRECTAMENTE POR URL
-        get("/sumar_cantidades/:n1/:n2", (req, res) -> {
-            int num1 = Integer.parseInt(req.params("n1"));
-            int num2 = Integer.parseInt(req.params("n2"));
-            return num1 + num2;
-        });
-        
-        
-        // (POST) RECIBIENDO LOS PARAMETRO POR FORM
-        post("/sumar_cantidades", (req, res) -> {
-            double num1 = Integer.parseInt(req.queryParams("n1"));
-            double num2 = Integer.parseInt(req.queryParams("n2"));
-            return num1 + num2;
-        });
-        
-        // (POST) RECIBIENDO LOS PARAMETRO DIRECTAMENTE POR URL
-        post("/sumar_cantidades/:n1/:n2", (req, res) -> {
-            double num1 = Integer.parseInt(req.params("n1"));
-            double num2 = Integer.parseInt(req.params("n2"));
-            return num1 + num2;
-        });
-        
-      // (POST) RECIBIENDO LOS PARAMETRO DIRECTAMENTE POR URL
-        post("/insertar_cliente", (req, res) -> {
-           
-            req.queryParams("d1");
-            req.queryParams("d2");
-            DaoClientes dd = new DaoClientes();
-            
-            return "OK";
-        });  
-        */
-        // (GET) RECIBIENDO LOS PARAMETRO DIRECTAMENTE POR URL
-        
         
         /*Servicios de Producto*/
         get("/buscar_producto/:token/:n1", (req, res) -> {
@@ -80,7 +41,7 @@ public class server {
                 return Respuesta.ToJson(r);
             }
         });
-        // (POST) RECIBIENDO LOS PARAMETRO POR FORM
+       
         post("/insertar_producto", (req, res) -> {
             String token = req.queryParams("token");
             if(Token.check_token(token)){
@@ -100,7 +61,7 @@ public class server {
                 return Respuesta.ToJson(r);
             }
         });
-        
+        /*----FIN---Servicios de Producto*/
         /*Servicios de usuario*/
         post("/insertar_usuario",(req,res) ->{
             String token = req.queryParams("token");
@@ -145,6 +106,83 @@ public class server {
                 return Respuesta.ToJson(r);
             }
         });
+        /*---FIN---Servicios de usuario*/
+        /*Servicios Categoria*/
+        post("/insertar_categoria",(req,res) ->{
+            Respuesta r = new Respuesta();
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                Categoria c = new Categoria();
+                c.setId(Integer.parseInt(req.queryParams("p1")));
+                c.setDescripcion(req.queryParams("p2"));
+                c.insertar_categoria();
+                r.setId(1);
+                r.setMensaje("Se inserto correctamente");
+                return Respuesta.ToJson(r);
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+            
+        });
+        
+        get("/buscar_categoria/:token", (req, res) -> {
+            Respuesta r = new Respuesta();
+            String token = req.params("token"); 
+            if(Token.check_token(token)){
+               
+                Categoria c = new Categoria();
+                String resp = c.get_categoria();
+                return resp;
+            }
+            else{
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });
+        /*---FIN---Servicios Categoria*/
+        /*Servicios Concepto*/
+        post("/insertar_concepto",(req,res) ->{
+            Respuesta r = new Respuesta();
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                Concepto c = new Concepto();
+                c.setId_concepto(Integer.parseInt(req.queryParams("p1")));
+                c.setDescripcion(req.queryParams("p2"));
+                c.insertar_concepto(c);
+                r.setId(1);
+                r.setMensaje("Se inserto correctamente");
+                return Respuesta.ToJson(r);
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+            
+        });
+        
+        get("/buscar_concepto/:token", (req, res) -> {
+            Respuesta r = new Respuesta();
+            String token = req.params("token"); 
+            if(Token.check_token(token)){
+               
+                Concepto c = new Concepto();
+                String resp = c.get_concepto();
+                return resp;
+            }
+            else{
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });
+        /*--FIN--- Servicios Concepto*/
         
     }
     

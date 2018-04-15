@@ -5,6 +5,7 @@
  */
 package Clases;
 
+import utilidades.Util;
 import db.Db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

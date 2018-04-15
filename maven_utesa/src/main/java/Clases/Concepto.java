@@ -18,16 +18,16 @@ import java.util.logging.Logger;
  *
  * @author JuanLH
  */
-public class Categoria {
-    int id;
+public class Concepto {
+    int id_concepto;
     String descripcion;
 
-    public int getId() {
-        return id;
+    public int getId_concepto() {
+        return id_concepto;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId_concepto(int id_concepto) {
+        this.id_concepto = id_concepto;
     }
 
     public String getDescripcion() {
@@ -38,42 +38,44 @@ public class Categoria {
         this.descripcion = descripcion;
     }
     
-    public String insertar_categoria(){
+    public String insertar_concepto(Concepto info){
         Db dbase = Util.getConection();
         Respuesta r = new Respuesta();
-        String sql="INSERT INTO \"Categoria\"(id, descripcion)\n" +
-        "    VALUES (?, ?);";
-        try {
+        String sql = "INSERT INTO \"Concepto\"(\n" +
+            "            id_concepto, descripcion)\n" +
+            "    VALUES (?, ?);";
+        try{
             PreparedStatement p = Db.conexion.prepareStatement(sql);
-            p.setInt(1, id);
-            p.setString(2, descripcion);
+            
+            p.setInt(1, info.getId_concepto());
+            p.setString(2,info.getDescripcion());
             p.execute();
             dbase.CerrarConexion();
             r.setId(1);
-            r.setMensaje("Se inserto correctamente");
+            r.setMensaje("Se inserto correctamiente");
             return Respuesta.ToJson(r);
-        } catch (SQLException ex) {
-            Logger.getLogger(Categoria.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+        }
+        catch(SQLException e){
             r.setId(-1);
             r.setMensaje("Error en la base de datos");
+            System.err.println(e.getMessage());
             return Respuesta.ToJson(r);
-            
         }
+                
     }
     
-        public String get_categoria(){
+    public String get_concepto(){
         Db dbase = Util.getConection();
         Respuesta r = new Respuesta();
-        String sql="SELECT id, descripcion\n" +
-                "  FROM \"Categoria\";";
-        ArrayList<Categoria> lista = new ArrayList();
-        ResultSet rs;
+        String sql="SELECT id_concepto, descripcion\n" +
+                    "  FROM \"Concepto\";";
+        ArrayList<Concepto> lista = new ArrayList();
+        
         try {
-            rs = dbase.execSelect(sql);
+            ResultSet rs = dbase.execSelect(sql);
             while(rs.next()){
-                Categoria c = new Categoria();
-                c.setId(rs.getInt(1));
+                Concepto c = new Concepto();
+                c.setId_concepto(rs.getInt(1));
                 c.setDescripcion(rs.getString(2));
                 lista.add(c);
             }
