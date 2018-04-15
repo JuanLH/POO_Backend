@@ -5,6 +5,7 @@
  */
 package Clases;
 
+import utilidades.Respuesta;
 import utilidades.Util;
 import com.google.gson.Gson;
 import db.Db;
