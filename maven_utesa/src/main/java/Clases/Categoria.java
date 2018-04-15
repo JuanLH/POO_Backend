@@ -42,12 +42,12 @@ public class Categoria {
     public String insertar_categoria(){
         Db dbase = Util.getConection();
         Respuesta r = new Respuesta();
-        String sql="INSERT INTO \"Categoria\"(id, descripcion)\n" +
-        "    VALUES (?, ?);";
+        String sql="INSERT INTO \"Categoria\"(descripcion)\n" +
+        "    VALUES (?);";
         try {
             PreparedStatement p = Db.conexion.prepareStatement(sql);
-            p.setInt(1, id);
-            p.setString(2, descripcion);
+            p.setString(1, descripcion);
+            
             p.execute();
             dbase.CerrarConexion();
             r.setId(1);

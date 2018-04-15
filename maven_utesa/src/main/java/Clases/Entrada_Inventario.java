@@ -61,10 +61,18 @@ public class Entrada_Inventario {
         this.id_usuario = id_usuario;
     }
     
-    public void entrada_inventario(String js_entrada_inv,String js_detalle_ent){
+    public Respuesta entrada_inventario(String js_entrada_inv,String js_detalle_ent){
         Gson json = new Gson();
+        Respuesta r = new Respuesta();
         Entrada_Inventario e = json.fromJson(js_entrada_inv, Entrada_Inventario.class);
-        e.setId_entrada(insert_entrada_inventario(e));
+        try {
+            e.setId_entrada(insert_entrada_inventario(e));
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            r.setId(-1);
+            r.setMensaje("Entrada_inventario- Error en la base de datos");
+            return r;
+        }
         
         
         
@@ -84,18 +92,27 @@ public class Entrada_Inventario {
         
         /*Insert the data en Detalle_entrada*/
         for(Detalle_Entrada de:lista){
-            de.insert(de);
+            try {
+                de.insert(de);
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                r.setId(-1);
+                r.setMensaje("Entrada_inventario- Error en la base de datos");
+                return r;
+            }
         }
-        
+        r.setId(1);
+        r.setMensaje("Se inserto correctmente");
+        return r;
     }
     
-    public int insert_entrada_inventario(Entrada_Inventario info){
+    public int insert_entrada_inventario(Entrada_Inventario info) throws SQLException{
         Db dbase = Util.getConection();
         Respuesta r = new Respuesta();
         String sql = "INSERT INTO \"Entrada_Inventario\"(\n" +
         "            id_concepto, fecha, id_usuario)\n" +
         "    VALUES (?, ?, ?);";
-        try{
+        
             PreparedStatement p = Db.conexion.prepareStatement(sql);
             p.setInt(1,info.getId_concepto());
             p.setTimestamp(2, info.getFecha());
@@ -104,12 +121,9 @@ public class Entrada_Inventario {
             dbase.CerrarConexion();
             
             return getLastId();
-        }
-        catch(SQLException e){
-            
-            System.err.println(e.getMessage());
-            return -1;
-        }
+        
+        
+        
     }
     
     public int getLastId() {

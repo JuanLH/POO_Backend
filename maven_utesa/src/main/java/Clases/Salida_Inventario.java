@@ -84,7 +84,11 @@ public class Salida_Inventario {
         
         /*Insert the data en Detalle_entrada*/
         for(Detalle_Salida de:lista){
-            de.insert(de);
+            try {
+                de.insert(de);
+            } catch (SQLException ex) {
+                Logger.getLogger(Salida_Inventario.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
     }

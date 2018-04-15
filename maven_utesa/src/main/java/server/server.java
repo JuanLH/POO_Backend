@@ -12,6 +12,7 @@ package server;
 
 import Clases.Categoria;
 import Clases.Concepto;
+import Clases.Entrada_Inventario;
 import Clases.Producto;
 import utilidades.Respuesta;
 import Clases.Token;
@@ -113,8 +114,7 @@ public class server {
             String token = req.queryParams("token");
             if(Token.check_token(token)){
                 Categoria c = new Categoria();
-                c.setId(Integer.parseInt(req.queryParams("p1")));
-                c.setDescripcion(req.queryParams("p2"));
+                c.setDescripcion(req.queryParams("p1"));
                 c.insertar_categoria();
                 r.setId(1);
                 r.setMensaje("Se inserto correctamente");
@@ -183,7 +183,26 @@ public class server {
             }
         });
         /*--FIN--- Servicios Concepto*/
-        
+        /*Servicios de Inventario*/
+        post("/insertar_entrada",(req,res) ->{
+            Respuesta r = new Respuesta();
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                String js_entrada_inv = req.queryParams("js_entrada_inv");
+                String js_detalle_ent = req.queryParams("js_detelle_ent");
+                Entrada_Inventario ei = new Entrada_Inventario();
+                r = ei.entrada_inventario(js_entrada_inv, js_detalle_ent);
+                return Respuesta.ToJson(r);
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+            
+        });
+        /*--FIN--- Servicios de Inventario*/
     }
     
     

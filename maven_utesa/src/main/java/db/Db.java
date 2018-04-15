@@ -23,8 +23,8 @@ public class Db {
 
   // "jdbc:postgresql://localhost/northwind"
    public Db(String db,String user,String pass)   {
-        //String url = "jdbc:postgresql://localhost:5435/"+db;
-        String url = "jdbc:postgresql://localhost:5432/"+db;
+        String url = "jdbc:postgresql://localhost:5435/"+db;
+        //String url = "jdbc:postgresql://localhost:5432/"+db;
         
         try { 
             Class.forName("org.postgresql.Driver");

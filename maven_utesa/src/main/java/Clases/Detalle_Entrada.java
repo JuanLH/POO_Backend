@@ -51,13 +51,13 @@ public class Detalle_Entrada {
         this.costo = costo;
     }
     
-    public String insert(Detalle_Entrada info){
+    public void insert(Detalle_Entrada info) throws SQLException{
         Db dbase = Util.getConection();
         Respuesta r = new Respuesta();
         String sql = "INSERT INTO \"Detalle_Entrada\"(\n" +
         "            id_entrada, referencia, cantidad, costo)\n" +
         "    VALUES (?, ?, ?, ?);";
-        try{
+        
             PreparedStatement p = Db.conexion.prepareStatement(sql);
             p.setInt(1,info.getId_entrada());
             p.setInt(2, info.getReferencia());
@@ -65,16 +65,9 @@ public class Detalle_Entrada {
             p.setFloat(4, info.getCosto());
             p.execute();
             dbase.CerrarConexion();
-            r.setId(1);
-            r.setMensaje("Se inserto correctamiente");
-            return Respuesta.ToJson(r);
-        }
-        catch(SQLException e){
-            r.setId(-1);
-            r.setMensaje("Error en la base de datos");
-            System.err.println(e.getMessage());
-            return Respuesta.ToJson(r);
-        }
+            
+        
+        
     }
     
     
