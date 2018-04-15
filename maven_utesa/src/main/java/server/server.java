@@ -13,6 +13,7 @@ package server;
 import Clases.Categoria;
 import Clases.Concepto;
 import Clases.Entrada_Inventario;
+import Clases.Historial;
 import Clases.Producto;
 import utilidades.Respuesta;
 import Clases.Token;
@@ -96,6 +97,8 @@ public class server {
             if(Token.check_token(token)){
                 String id_usuario = req.params("n1");
                 Token t = new Token();
+                Historial h = new Historial();
+                h.insert_salida_historial(token);
                 t.delete_token(id_usuario);
                 r.setId(1);
                 r.setMensaje("logout succesfull");
@@ -184,12 +187,31 @@ public class server {
         });
         /*--FIN--- Servicios Concepto*/
         /*Servicios de Inventario*/
-        post("/insertar_entrada",(req,res) ->{
+        post("/insertar_entrada_inventario",(req,res) ->{
             Respuesta r = new Respuesta();
             String token = req.queryParams("token");
             if(Token.check_token(token)){
                 String js_entrada_inv = req.queryParams("js_entrada_inv");
-                String js_detalle_ent = req.queryParams("js_detelle_ent");
+                String js_detalle_ent = req.queryParams("js_detalle_ent");
+                Entrada_Inventario ei = new Entrada_Inventario();
+                r = ei.entrada_inventario(js_entrada_inv, js_detalle_ent);
+                return Respuesta.ToJson(r);
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+            
+        });
+        
+        post("/insertar_salida_inventario",(req,res) ->{
+            Respuesta r = new Respuesta();
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                String js_entrada_inv = req.queryParams("js_salida_inv");
+                String js_detalle_ent = req.queryParams("js_detalle_sal");
                 Entrada_Inventario ei = new Entrada_Inventario();
                 r = ei.entrada_inventario(js_entrada_inv, js_detalle_ent);
                 return Respuesta.ToJson(r);

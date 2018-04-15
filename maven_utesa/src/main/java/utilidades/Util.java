@@ -16,8 +16,8 @@ public class Util {
     private static Connection cnn = null;
     
     public static Db getConection(){
-        //Db dbase = new Db("POO","postgres","JuanLH@22");
-        Db dbase = new Db("POO","postgres","buli1218@");
+        Db dbase = new Db("POO","postgres","JuanLH@22");
+        //Db dbase = new Db("POO","postgres","buli1218@");
         cnn = dbase.getConection();
         return dbase;
     }
