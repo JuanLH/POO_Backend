@@ -43,13 +43,13 @@ public class Concepto {
         Db dbase = Util.getConection();
         Respuesta r = new Respuesta();
         String sql = "INSERT INTO \"Concepto\"(\n" +
-            "            id_concepto, descripcion)\n" +
+            "           descripcion)\n" +
             "    VALUES (?, ?);";
         try{
             PreparedStatement p = Db.conexion.prepareStatement(sql);
             
-            p.setInt(1, info.getId_concepto());
-            p.setString(2,info.getDescripcion());
+            
+            p.setString(1,info.getDescripcion());
             p.execute();
             dbase.CerrarConexion();
             r.setId(1);

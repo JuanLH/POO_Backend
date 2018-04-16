@@ -91,15 +91,14 @@ public class server {
             return resp;
         });
         
-        get("/logout/:token/:n1", (req, res) -> {
+        get("/logout/:token", (req, res) -> {
             Respuesta r = new Respuesta();
             String token = req.params("token");
             if(Token.check_token(token)){
-                String id_usuario = req.params("n1");
                 Token t = new Token();
                 Historial h = new Historial();
                 h.insert_salida_historial(token);
-                t.delete_token(id_usuario);
+                t.delete_token(token);
                 r.setId(1);
                 r.setMensaje("logout succesfull");
                 return Respuesta.ToJson(r);
@@ -154,8 +153,8 @@ public class server {
             String token = req.queryParams("token");
             if(Token.check_token(token)){
                 Concepto c = new Concepto();
-                c.setId_concepto(Integer.parseInt(req.queryParams("p1")));
-                c.setDescripcion(req.queryParams("p2"));
+                
+                c.setDescripcion(req.queryParams("p1"));
                 c.insertar_concepto(c);
                 r.setId(1);
                 r.setMensaje("Se inserto correctamente");

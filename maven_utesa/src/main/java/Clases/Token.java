@@ -67,12 +67,16 @@ public class Token {
         
     }
     
-    public String delete_token(String id_usuario) throws SQLException{
+    public String delete_token(String token) {
         Db dbase = Util.getConection();
         String sql = "DELETE FROM \"Token\"\n" +
-        " WHERE id_usuario = '"+id_usuario+"';";
+        " WHERE token = '"+token+"';";
         
-        dbase.execSelect(sql);
+        try {
+            dbase.execSelect(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(Token.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return "1";
     }
     
