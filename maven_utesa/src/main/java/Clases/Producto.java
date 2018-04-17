@@ -110,6 +110,32 @@ public class Producto {
                 
     }
     
+    public void actualizar_existencia(int referencia,float cant,char tm) throws SQLException{
+        Db dbase = Util.getConection();
+        float existencia;
+        String sql = "select existencia from \"Producto\" where referencia = "+referencia+"";
+        String sql2 = "UPDATE \"Producto\"\n" +
+        "   SET existencia=?\n" +
+        " WHERE referencia =?;";
+        
+        ResultSet rs = dbase.execSelect(sql);
+        if(rs.next()){
+            existencia = rs.getFloat(1);
+            if(tm == 'e')
+                existencia = existencia + cant;
+            else
+                existencia = existencia - cant;
+            
+            PreparedStatement p = Db.conexion.prepareStatement(sql2);
+            p.setFloat(1, existencia);
+            p.setInt(2, referencia);
+            p.execute();
+            
+        }
+        dbase.CerrarConexion();
+        
+    }
+    
     public String get_producto(String nombre){
         Db dbase = Util.getConection();
         Respuesta resp = new Respuesta();

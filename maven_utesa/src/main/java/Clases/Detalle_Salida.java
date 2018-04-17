@@ -64,6 +64,7 @@ public class Detalle_Salida {
             p.setFloat(3, info.getCantidad());
             p.setFloat(4, info.getCosto());
             p.execute();
+            new Producto().actualizar_existencia(info.getReferencia(),info.getCantidad(), 's');
             dbase.CerrarConexion();
         
     }
