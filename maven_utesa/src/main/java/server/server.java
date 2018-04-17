@@ -11,6 +11,7 @@ package server;
  */
 
 import Clases.Categoria;
+import Clases.Cliente;
 import Clases.Concepto;
 import Clases.Entrada_Inventario;
 import Clases.Historial;
@@ -224,6 +225,42 @@ public class server {
             
         });
         /*--FIN--- Servicios de Inventario*/
+        /*Servicio de Cliente*/
+        get("/buscar_cliente/:token/:n1", (req, res) -> {
+            String token = req.params("token"); 
+            if(Token.check_token(token)){
+                String nombre = req.params("n1");
+                Cliente p = new Cliente();
+                String resp = p.get_cliente(nombre);
+                return resp;
+            }
+            else{
+                Respuesta r = new Respuesta();
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });
+       
+        post("/insertar_cliente", (req, res) -> {
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                Cliente p = new Cliente();
+                p.setNombre(req.queryParams("p1"));
+                p.setApellido(req.queryParams("p2"));
+                p.setDireccion(req.queryParams("p3"));
+                p.setTelefono(req.queryParams("p4"));
+                p.setEmail(req.queryParams("p5"));
+                return  p.insertar_cliente(p);      
+            }
+            else{
+                Respuesta r = new Respuesta();
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });
+        /*--Fin-- Servicios cliente*/
     }
     
     
