@@ -14,6 +14,7 @@ import Clases.Categoria;
 import Clases.Cliente;
 import Clases.Concepto;
 import Clases.Entrada_Inventario;
+import Clases.Factura;
 import Clases.Historial;
 import Clases.Producto;
 import utilidades.Respuesta;
@@ -261,6 +262,26 @@ public class server {
             }
         });
         /*--Fin-- Servicios cliente*/
+        /*Servicios de Factura*/
+        post("/insertar_factura",(req,res) ->{
+            Respuesta r = new Respuesta();
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                String js_factura = req.queryParams("js_factura");
+                String js_detalle_factura = req.queryParams("js_detalle_factura");
+                Factura f = new Factura();
+                r = f.factura(js_factura, js_detalle_factura);
+                return Respuesta.ToJson(r);
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+            
+        });
+        /*Fin de servicio de factua*/
     }
     
     
