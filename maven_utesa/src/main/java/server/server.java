@@ -274,12 +274,31 @@ public class server {
                 return Respuesta.ToJson(r);
             }
             else{
-                
                 r.setId(-1);
                 r.setMensaje("token invalido");
                 return Respuesta.ToJson(r);
             }
             
+        });
+        
+        get("/buscar_proxima_factura/:token", (req, res) -> {
+            String token = req.params("token"); 
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                
+                Factura f = new Factura();
+                int id = f.getLastId();
+                
+                r.setId(1);
+                r.setMensaje(Integer.toString(id));
+                return Respuesta.ToJson(r);
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
         });
         /*Fin de servicio de factua*/
     }
