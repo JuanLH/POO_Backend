@@ -61,7 +61,7 @@ public class Salida_Inventario {
         this.id_usuario = id_usuario;
     }
     
-    public void salida_inventario(String js_entrada_inv,String js_detalle_ent){
+    public Respuesta salida_inventario(String js_entrada_inv,String js_detalle_ent){
         Gson json = new Gson();
         Respuesta r = new Respuesta();
         Salida_Inventario e = json.fromJson(js_entrada_inv, Salida_Inventario.class);
@@ -71,6 +71,7 @@ public class Salida_Inventario {
             System.out.println(ex.getMessage());
             r.setId(-1);
             r.setMensaje("Error de la base de datos");
+            return r;
         }
         
         
@@ -97,8 +98,13 @@ public class Salida_Inventario {
                 System.out.println(ex.getMessage());
                 r.setId(-1);
                 r.setMensaje("Error de la base de datos");
+                return r;
             }
         }
+        
+        r.setId(1);
+        r.setMensaje("Se inserto correctmente");
+        return r;
         
     }
     

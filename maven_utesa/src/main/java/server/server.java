@@ -17,6 +17,7 @@ import Clases.Entrada_Inventario;
 import Clases.Factura;
 import Clases.Historial;
 import Clases.Producto;
+import Clases.Salida_Inventario;
 import utilidades.Respuesta;
 import Clases.Token;
 import Clases.Usuario;
@@ -211,10 +212,10 @@ public class server {
             Respuesta r = new Respuesta();
             String token = req.queryParams("token");
             if(Token.check_token(token)){
-                String js_entrada_inv = req.queryParams("js_salida_inv");
-                String js_detalle_ent = req.queryParams("js_detalle_sal");
-                Entrada_Inventario ei = new Entrada_Inventario();
-                r = ei.entrada_inventario(js_entrada_inv, js_detalle_ent);
+                String js_salida_inv = req.queryParams("js_salida_inv");
+                String js_detalle_sal = req.queryParams("js_detalle_sal");
+                Salida_Inventario ei = new Salida_Inventario();
+                r = ei.salida_inventario(js_salida_inv, js_detalle_sal);
                 return Respuesta.ToJson(r);
             }
             else{
