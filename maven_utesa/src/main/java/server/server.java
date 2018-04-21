@@ -214,8 +214,8 @@ public class server {
             if(Token.check_token(token)){
                 String js_salida_inv = req.queryParams("js_salida_inv");
                 String js_detalle_sal = req.queryParams("js_detalle_sal");
-                Salida_Inventario ei = new Salida_Inventario();
-                r = ei.salida_inventario(js_salida_inv, js_detalle_sal);
+                Salida_Inventario si = new Salida_Inventario();
+                r = si.salida_inventario(js_salida_inv, js_detalle_sal);
                 return Respuesta.ToJson(r);
             }
             else{

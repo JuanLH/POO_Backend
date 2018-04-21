@@ -85,6 +85,6 @@ public class Detalle_Factura {
             
             /*Actualiza Inventario*/
             new Producto().actualizar_existencia(this.getReferencia(),this.getCantidad(), 's');
-            dbase.CerrarConexion();
+            //dbase.CerrarConexion();
     }
 }
