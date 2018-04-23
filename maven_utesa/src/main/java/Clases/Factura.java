@@ -157,4 +157,37 @@ public class Factura {
         }
         return id;
     }
+    
+    public Respuesta getFacturas(){
+        Db dbase = Util.getConection();
+        Respuesta r = new Respuesta();
+        String sql = "SELECT id_factura, tipo_factura, fecha, id_cliente, monto, id_usuario\n" +
+        "  FROM \"Factura\";";
+        ArrayList<Factura> lista = new ArrayList();
+        try {
+            ResultSet rs = dbase.execSelect(sql);
+            while(rs.next()){
+                Factura fac = new Factura();
+                fac.setId_factura(rs.getInt(1));
+                fac.setTipo_factura(rs.getString(2));
+                fac.setFecha(rs.getTimestamp(3));
+                fac.setId_cliente(rs.getInt(4));
+                fac.setMonto(rs.getFloat(5));
+                fac.setId_usuario(rs.getString(6));
+                lista.add(fac);
+            }
+            r.setId(1);
+            r.setMensaje(Respuesta.ToJson(lista));
+            return r;
+        } catch (SQLException ex) {
+            Logger.getLogger(Entrada_Inventario.class.getName())
+                    .log(Level.SEVERE, null, ex);
+            r.setId(-1);
+            r.setMensaje("Error en la base de datos");
+            return r;
+        }
+                
+    }
+    
+    
 }
