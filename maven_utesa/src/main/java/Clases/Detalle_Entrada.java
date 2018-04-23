@@ -66,7 +66,7 @@ public class Detalle_Entrada {
             p.execute();
             
             new Producto().actualizar_existencia(info.getReferencia(),info.getCantidad(), 'e');
-            dbase.CerrarConexion();
+            //dbase.CerrarConexion();
             
         
         

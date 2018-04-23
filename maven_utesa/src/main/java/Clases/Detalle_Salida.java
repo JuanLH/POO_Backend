@@ -8,6 +8,8 @@ package Clases;
 import db.Db;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utilidades.Respuesta;
 import utilidades.Util;
 
@@ -51,21 +53,28 @@ public class Detalle_Salida {
         this.costo = costo;
     }
     
-    public void insert(Detalle_Salida info) throws SQLException{
+    public void insert(Detalle_Salida info) throws  Exception {
         Db dbase = Util.getConection();
-        Respuesta r = new Respuesta();
+        
         String sql = "INSERT INTO \"Detalle_Salida\"(\n" +
         "            id_salida, referencia, cantidad, costo)\n" +
         "    VALUES (?, ?, ?, ?);";
         
-            PreparedStatement p = Db.conexion.prepareStatement(sql);
-            p.setInt(1,info.getId_salida());
-            p.setInt(2, info.getReferencia());
-            p.setFloat(3, info.getCantidad());
-            p.setFloat(4, info.getCosto());
-            p.execute();
-            new Producto().actualizar_existencia(info.getReferencia(),info.getCantidad(), 's');
-            dbase.CerrarConexion();
+        PreparedStatement p;
+
+        p = dbase.conexion.prepareStatement(sql);
+
+        p.setInt(1,info.getId_salida());
+        p.setInt(2, info.getReferencia());
+        p.setFloat(3, info.getCantidad());
+        p.setFloat(4, info.getCosto());
+
+        p.execute();
+
+        Producto pro = new Producto();
+        pro.actualizar_existencia(info.getReferencia(),info.getCantidad(), 's');
+
+        //dbase.CerrarConexion();
         
     }
 }

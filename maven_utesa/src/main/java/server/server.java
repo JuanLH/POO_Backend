@@ -13,9 +13,12 @@ package server;
 import Clases.Categoria;
 import Clases.Cliente;
 import Clases.Concepto;
+import Clases.Detalle_Factura;
 import Clases.Entrada_Inventario;
+import Clases.Factura;
 import Clases.Historial;
 import Clases.Producto;
+import Clases.Salida_Inventario;
 import utilidades.Respuesta;
 import Clases.Token;
 import Clases.Usuario;
@@ -59,6 +62,22 @@ public class server {
             }
             else{
                 Respuesta r = new Respuesta();
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });
+        
+        get("/buscar_producto/:token/:id", (req, res) -> {
+            String token = req.params("token"); 
+            int id = Integer.parseInt(req.params("id"));
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                Producto f = new Producto();
+                return f.get_producto(id);
+            }
+            else{
+                
                 r.setId(-1);
                 r.setMensaje("token invalido");
                 return Respuesta.ToJson(r);
@@ -210,10 +229,10 @@ public class server {
             Respuesta r = new Respuesta();
             String token = req.queryParams("token");
             if(Token.check_token(token)){
-                String js_entrada_inv = req.queryParams("js_salida_inv");
-                String js_detalle_ent = req.queryParams("js_detalle_sal");
-                Entrada_Inventario ei = new Entrada_Inventario();
-                r = ei.entrada_inventario(js_entrada_inv, js_detalle_ent);
+                String js_salida_inv = req.queryParams("js_salida_inv");
+                String js_detalle_sal = req.queryParams("js_detalle_sal");
+                Salida_Inventario si = new Salida_Inventario();
+                r = si.salida_inventario(js_salida_inv, js_detalle_sal);
                 return Respuesta.ToJson(r);
             }
             else{
@@ -261,6 +280,77 @@ public class server {
             }
         });
         /*--Fin-- Servicios cliente*/
+        /*Servicios de Factura*/
+        post("/insertar_factura",(req,res) ->{
+            Respuesta r = new Respuesta();
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                String js_factura = req.queryParams("js_factura");
+                String js_detalle_factura = req.queryParams("js_detalle_factura");
+                Factura f = new Factura();
+                r = f.factura(js_factura, js_detalle_factura);
+                return Respuesta.ToJson(r);
+            }
+            else{
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+            
+        });
+        
+        get("/buscar_proxima_factura/:token", (req, res) -> {
+            String token = req.params("token"); 
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                
+                Factura f = new Factura();
+                int id = f.getLastId();
+                
+                r.setId(1);
+                r.setMensaje(Integer.toString(id));
+                return Respuesta.ToJson(r);
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });
+        
+        get("/buscar_factura/:token", (req, res) -> {
+            String token = req.params("token"); 
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                Factura f = new Factura();
+                return Respuesta.ToJson(f.getFacturas());
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });   
+        
+        get("/buscar_detalle_factura/:token/:id_factura", (req, res) -> {
+            String token = req.params("token"); 
+            int id_factura = Integer.parseInt(req.params("id_factura"));
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                Detalle_Factura f = new Detalle_Factura();
+                r = f.get_detalle_factura(id_factura);
+                return Respuesta.ToJson(r);
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });   
+        /*Fin de servicio de factua*/
     }
     
     
