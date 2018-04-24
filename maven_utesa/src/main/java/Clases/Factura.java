@@ -141,7 +141,7 @@ public class Factura {
         return getLastId();
     }
     
-    public boolean disminuir_balance(float monto,int id_factura){
+    public static boolean disminuir_balance(float monto,int id_factura){
         try {
             Db dbase = Util.getConection();
             Float balance_actual=0.0f;

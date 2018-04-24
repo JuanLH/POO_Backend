@@ -61,6 +61,7 @@ public class Detalle_Pago {
         p.setFloat(2, this.getMonto());
         p.setInt(3, this.getId_recibo());
         p.execute();
+        Factura.disminuir_balance(this.getMonto(), this.getId_factura());
         dbase.CerrarConexion();  
         
     }
