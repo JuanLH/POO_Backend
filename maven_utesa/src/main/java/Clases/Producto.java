@@ -143,6 +143,8 @@ public class Producto {
         String sql = "SELECT referencia, descripcion, id_categoria, precio, costo, existencia, tax FROM \"Producto\""
                 + " where descripcion ilike '"+nombre+"%' ;";
         
+        System.out.println("Sql ->"+sql);
+        
         try{
             ResultSet rs = dbase.execSelect(sql);
             

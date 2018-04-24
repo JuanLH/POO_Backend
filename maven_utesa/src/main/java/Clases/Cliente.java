@@ -143,4 +143,45 @@ public class Cliente {
         return resp.ToJson(resp); 
     }
     
+    public String get_cliente(int id){
+        Db dbase = Util.getConection();
+        Respuesta resp = new Respuesta();
+        String sql = "SELECT id, nombre, apellido, direccion, telefono, email\n" +
+                    "  FROM \"Cliente\" where id = "+id+";";
+        
+        try{
+            ResultSet rs = dbase.execSelect(sql);
+            
+            if(rs.next()){
+                Cliente p = new Cliente();
+                p.setId(rs.getInt(1));
+                p.setNombre(rs.getString(2));
+                p.setApellido(rs.getString(3));
+                p.setDireccion(rs.getString(4));
+                p.setTelefono(rs.getString(5));
+                p.setEmail(rs.getString(6));
+                resp.setId(1);
+                resp.setMensaje(Respuesta.ToJson(p));
+                dbase.CerrarConexion();
+                return Respuesta.ToJson(resp);
+            }
+            else
+            {
+                resp.setId(0);
+                resp.setMensaje("No hay registros actualmente en la base de datos");
+                dbase.CerrarConexion();
+                return resp.ToJson(resp);
+            }
+        }
+        catch(SQLException e){
+            resp.setId(-1);
+            resp.setMensaje("Error de la base de datos ");
+            System.out.println(e.getMessage());
+            dbase.CerrarConexion();
+            return resp.ToJson(resp);
+        }
+        
+        
+    }
+    
 }

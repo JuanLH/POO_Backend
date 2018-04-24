@@ -18,6 +18,8 @@ import Clases.Entrada_Inventario;
 import Clases.Factura;
 import Clases.Historial;
 import Clases.Producto;
+import Clases.Recibo;
+import java.sql.Timestamp;
 import Clases.Salida_Inventario;
 import utilidades.Respuesta;
 import Clases.Token;
@@ -68,7 +70,7 @@ public class server {
             }
         });
         
-        get("/buscar_producto/:token/:id", (req, res) -> {
+        get("/buscar_producto_ref/:token/:id", (req, res) -> {
             String token = req.params("token"); 
             int id = Integer.parseInt(req.params("id"));
             Respuesta r= new Respuesta();
@@ -260,6 +262,22 @@ public class server {
                 return Respuesta.ToJson(r);
             }
         });
+        
+        get("/buscar_cliente_id/:token/:n1", (req, res) -> {
+            String token = req.params("token"); 
+            if(Token.check_token(token)){
+                int id = Integer.parseInt(req.params("n1"));
+                Cliente p = new Cliente();
+                String resp = p.get_cliente(id);
+                return resp;
+            }
+            else{
+                Respuesta r = new Respuesta();
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });
        
         post("/insertar_cliente", (req, res) -> {
             String token = req.queryParams("token");
@@ -334,6 +352,22 @@ public class server {
             }
         });   
         
+        get("/buscar_factura/:token/:id_cliente", (req, res) -> {
+            String token = req.params("token"); 
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                int id_cliente = Integer.parseInt(req.params("id_cliente"));
+                Factura f = new Factura();
+                return Respuesta.ToJson(f.getFacturas(id_cliente));
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });   
+        
         get("/buscar_detalle_factura/:token/:id_factura", (req, res) -> {
             String token = req.params("token"); 
             int id_factura = Integer.parseInt(req.params("id_factura"));
@@ -351,6 +385,60 @@ public class server {
             }
         });   
         /*Fin de servicio de factua*/
+        /*servicio de recibo*/
+        post("/insertar_recibo",(req,res) ->{
+            Respuesta r = new Respuesta();
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                Recibo rec = new Recibo();
+                rec.setFecha( Timestamp.valueOf(req.queryParams("p1")));
+                rec.setId_cliente(Integer.parseInt(req.queryParams("p2")));
+                rec.setMonto(Float.parseFloat(req.queryParams("p3")));
+                rec.setConcepto_recibo(req.queryParams("p4"));
+                rec.setId_usuario(req.queryParams("p5"));
+                
+                return Respuesta.ToJson(rec.insert_recibo());
+            }
+            else{
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+            
+        });
+        
+        get("/buscar_recibos/:token", (req, res) -> {
+            String token = req.params("token"); 
+            
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                Recibo rec = new Recibo();
+                return Respuesta.ToJson(rec.getRecibos());
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });
+        
+        get("/buscar_recibos/:token/:id_cliente", (req, res) -> {
+            String token = req.params("token"); 
+            int id_cliente = Integer.parseInt(req.params("id_cliente"));
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                Recibo rec = new Recibo();
+                return Respuesta.ToJson(rec.getRecibos(id_cliente));
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });   
+        /*Fin de servicio de recibo*/
     }
     
     
