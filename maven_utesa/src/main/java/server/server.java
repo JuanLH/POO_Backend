@@ -366,7 +366,23 @@ public class server {
                 r.setMensaje("token invalido");
                 return Respuesta.ToJson(r);
             }
-        });   
+        });  
+        
+        get("/buscar_factura_for_recibo/:token/:id_cliente", (req, res) -> {
+            String token = req.params("token"); 
+            Respuesta r= new Respuesta();
+            if(Token.check_token(token)){
+                int id_cliente = Integer.parseInt(req.params("id_cliente"));
+                Factura f = new Factura();
+                return Respuesta.ToJson(f.getFacturas_forRecibo(id_cliente));
+            }
+            else{
+                
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+        });  
         
         get("/buscar_detalle_factura/:token/:id_factura", (req, res) -> {
             String token = req.params("token"); 
