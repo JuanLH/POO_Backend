@@ -91,7 +91,7 @@ public class Recibo {
             p.execute();
             dbase.CerrarConexion();
             r.setId(1);
-            r.setMensaje("Se inserto correctamente");
+            r.setMensaje(getLastId()+"");
         } catch (SQLException ex) {
             Logger.getLogger(Recibo.class.getName())
                     .log(Level.SEVERE, null, ex);
@@ -162,4 +162,22 @@ public class Recibo {
                 return r;
             }
         }
+        
+        public int getLastId() {
+        int id = -1;
+        Db dbase = Util.getConection();
+        String sql = "SELECT id_recibo, fecha, id_cliente, monto, concepto_recibo, id_usuario\n" +
+                    "  FROM \"Recibo\" order by id_recibo desc limit 1;";
+        
+        try {
+            ResultSet rs = dbase.execSelect(sql);
+            if(rs.next()){
+                id = rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Entrada_Inventario.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
 }

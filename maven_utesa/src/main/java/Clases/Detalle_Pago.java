@@ -8,6 +8,9 @@ package Clases;
 import db.Db;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import utilidades.Respuesta;
 import utilidades.Util;
 
 /**
@@ -50,19 +53,33 @@ public class Detalle_Pago {
         this.monto = monto;
     }
     
-    public void insert_detalle_pago() throws SQLException{
-        Db dbase = Util.getConection();
-        String sql ="INSERT INTO \"Detalle_Pago\"(\n" +
-            "            id_factura, monto, id_recibo)\n" +
-            "    VALUES ( ?, ?, ?);";
+    public Respuesta insert_detalle_pago() {
         
-        PreparedStatement p = Db.conexion.prepareStatement(sql);
-        p.setInt(1, this.getId_factura());
-        p.setFloat(2, this.getMonto());
-        p.setInt(3, this.getId_recibo());
-        p.execute();
-        Factura.disminuir_balance(this.getMonto(), this.getId_factura());
-        dbase.CerrarConexion();  
+        Respuesta r = new Respuesta();
+        try {
+            Db dbase = Util.getConection();
+            String sql ="INSERT INTO \"Detalle_Pago\"(\n" +
+                    "            id_factura, monto, id_recibo)\n" +
+                    "    VALUES ( ?, ?, ?);";
+            
+            PreparedStatement p = Db.conexion.prepareStatement(sql);
+            p.setInt(1, this.getId_factura());
+            p.setFloat(2, this.getMonto());
+            p.setInt(3, this.getId_recibo());
+            p.execute();
+            Factura.disminuir_balance(this.getMonto(), this.getId_factura());
+            //dbase.CerrarConexion();
+            
+            r.setId(1);
+            r.setMensaje("Se inserto correctamente");
+            return r;
+        } catch (SQLException ex) {
+            Logger.getLogger(Detalle_Pago.class.getName())
+                    .log(Level.SEVERE, null, ex);
+            r.setId(-1);
+            r.setMensaje("Error en la base de datos");
+            return r;
+        }
         
     }
 }

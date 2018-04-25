@@ -261,7 +261,7 @@ public class Factura {
     public Respuesta getFacturas_forRecibo(int id_cliente){
         Db dbase = Util.getConection();
         Respuesta r = new Respuesta();
-        String sql = "SELECT id_factura, tipo_factura, fecha, id_cliente, monto, id_usuario, \n" +
+        String sql = "SELECT id_factura, tipo_factura, fecha, id_cliente, monto,balance,id_usuario, \n" +
         "       balance\n" +
         "  FROM \"Factura\" where id_cliente="+id_cliente+" and tipo_factura ilike 'CREDITO' and balance > 0;";
         ArrayList<Factura> lista = new ArrayList();

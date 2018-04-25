@@ -14,6 +14,7 @@ import Clases.Categoria;
 import Clases.Cliente;
 import Clases.Concepto;
 import Clases.Detalle_Factura;
+import Clases.Detalle_Pago;
 import Clases.Entrada_Inventario;
 import Clases.Factura;
 import Clases.Historial;
@@ -455,6 +456,25 @@ public class server {
             }
         });   
         /*Fin de servicio de recibo*/
+        /*Detalle_Pago*/
+        post("/insertar_detalle_pago",(req,res) ->{
+            Respuesta r = new Respuesta();
+            String token = req.queryParams("token");
+            if(Token.check_token(token)){
+                Detalle_Pago rec = new Detalle_Pago();
+                rec.setId_factura(Integer.parseInt(req.queryParams("p1")));
+                rec.setMonto(Float.parseFloat(req.queryParams("p2")));
+                rec.setId_recibo(Integer.parseInt(req.queryParams("p3")));
+                return Respuesta.ToJson(rec.insert_detalle_pago());
+            }
+            else{
+                r.setId(-1);
+                r.setMensaje("token invalido");
+                return Respuesta.ToJson(r);
+            }
+            
+        });
+        /*Fin detalle_pago*/
     }
     
     
